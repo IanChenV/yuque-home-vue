@@ -30,7 +30,8 @@ export const routes = [
  */
 export function createAppRouter(history?: RouterHistory): Router {
   return createRouter({
-    history: history ?? createWebHistory(),
+    // BASE_URL 即部署子路径（GitHub Pages 为 /yuque-home-vue/，本地为 /）
+    history: history ?? createWebHistory(import.meta.env.BASE_URL),
     routes
   })
 }

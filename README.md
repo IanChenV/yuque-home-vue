@@ -1,8 +1,12 @@
 
 # yuque-home-vue
 
+[![CI](https://github.com/IanChenV/yuque-home-vue/actions/workflows/ci.yml/badge.svg)](https://github.com/IanChenV/yuque-home-vue/actions/workflows/ci.yml)
+
 语雀 dashboard（https://www.yuque.com/dashboard）的多页面高保真复刻，纯前端静态实现：
 数据全部来自本地 mock，无后端依赖，开箱即用。
+
+在线预览：**https://ianchenv.github.io/yuque-home-vue/**
 
 ## 技术栈
 
@@ -71,10 +75,14 @@ src/
 └── views/             # 7 个页面级视图
 ```
 
-## CI
+## CI 与部署
 
-GitHub Actions（`.github/workflows/ci.yml`）在 push 与 PR 时执行：
-类型检查 -> 单测（含覆盖率门槛）-> 生产构建。
+- **质量门禁**（`.github/workflows/ci.yml`）：push(main) 与 PR 触发，
+  类型检查 -> 单测（含覆盖率门槛）-> 生产构建。
+- **Pages 部署**（`.github/workflows/deploy.yml`）：push(main) 触发，
+  构建产物经 `actions/deploy-pages` 发布到
+  https://ianchenv.github.io/yuque-home-vue/。
+  SPA 深链接依赖 `public/404.html` 做客户端路径转发。
 
 ## License
 

@@ -4,6 +4,8 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
+  // 生产构建部署在 GitHub Pages 项目子路径下；本地 dev 保持根路径
+  base: process.env.NODE_ENV === 'production' ? '/yuque-home-vue/' : '/',
   plugins: [vue()],
   resolve: {
     alias: {
