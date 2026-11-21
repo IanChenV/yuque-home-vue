@@ -82,7 +82,8 @@ src/
 - **Pages 部署**（`.github/workflows/deploy.yml`）：push(main) 触发，
   构建产物经 `actions/deploy-pages` 发布到
   https://ianchenv.github.io/yuque-home-vue/。
-  SPA 深链接依赖 `public/404.html` 做客户端路径转发。
+  SPA 深链接由 `public/404.html` 暂存路径回到首页，
+  再经 `src/router/fallback.ts` 在应用启动时恢复导航。
 
 ## License
 

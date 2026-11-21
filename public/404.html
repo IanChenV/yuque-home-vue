@@ -5,19 +5,22 @@
     <title>yuque-home-vue</title>
     <script>
       // GitHub Pages 不支持 SPA history 回退，深链接会落到这个 404。
-      // 做法：把完整路径转发回 index.html，由 vue-router 继续解析。
-      // sessionStorage 防止「转发后仍 404」时无限循环，第二次直接回首页。
+      // 做法：把目标路径写入 sessionStorage，然后回到首页，
+      // 由应用启动时的 restoreFallbackPath 恢复真实导航（src/router/fallback.ts）。
       var repoPrefix = '/yuque-home-vue/'
       var segment = location.pathname.startsWith(repoPrefix)
         ? location.pathname.slice(repoPrefix.length)
         : location.pathname.replace(/^\//, '')
 
-      if (sessionStorage.getItem('spa-fallback-path') === segment) {
-        location.replace(repoPrefix)
-      } else {
-        sessionStorage.setItem('spa-fallback-path', segment)
-        location.replace(repoPrefix + segment + location.search + location.hash)
+      // 带扩展名的是静态资源缺失，不做导航劫持
+      if (!/\.[a-z0-9]+$/i.test(segment)) {
+        try {
+          sessionStorage.setItem('spa-fallback-path', segment + location.search + location.hash)
+        } catch (e) {
+          // 隐私模式等 storage 不可用场景，忽略即可（用户会看到首页）
+        }
       }
+      location.replace(repoPrefix)
     </script>
   </head>
   <body></body>
