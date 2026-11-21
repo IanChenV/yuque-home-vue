@@ -1,0 +1,210 @@
+/**
+ * 设计令牌 + 全局基础样式
+ *
+ * 主题策略：色值只在此文件定义一次。
+ * :root 为亮色基线，.dark 覆盖同名变量；组件里只出现语义类名
+ * （bg-surface / text-sub / border-line），因此切换主题不需要改任何组件。
+ *
+ * 注意两处「语义翻转」不能靠简单取反：
+ * 1. brand-hover 亮色下变深、暗色下需变亮才能表达 hover 反馈。
+ * 2. mark-bg / mark-fg 是语雀 Board 的黑底白字标识，暗色下必须整体反转，
+ *    否则黑块会直接融进深色背景。
+ */
+:root {
+  color-scheme: light;
+
+  --color-canvas: #ffffff;
+  --color-surface: #ffffff;
+  --color-ink: #1f2329;
+  --color-sub: #8a919f;
+  --color-muted: #646a73;
+  --color-line: #e5e6eb;
+  --color-line-strong: #c9cdd4;
+  --color-side: #f7f8f9;
+  --color-side-line: #ebecef;
+  --color-side-hover: #eef0f2;
+  --color-nav-active: #eceef0;
+  --color-tab-track: #f4f5f7;
+  --color-row-hover: #fafbfc;
+  --color-row-line: #f0f1f2;
+  --color-avatar: #d8dce1;
+  --color-avatar-line: #c9cdd4;
+  --color-brand: #3cb371;
+  --color-brand-hover: #2f9560;
+  --color-accent: #d97a2b;
+  --color-accent-line: #f0cfa8;
+  --color-promo-bg: #fdf6e3;
+  --color-promo-line: #f3e7c8;
+  --color-promo-hover: #fffaf0;
+  --color-badge-bg: #fff3e8;
+  --color-badge-1688: #f56600;
+  --color-doc: #4d8ff2;
+  --color-notify: #f04b4b;
+  --color-mark-bg: #16191c;
+  --color-mark-fg: #ffffff;
+  --color-icon-on: #ffffff;
+  --color-scrollbar: #dcdfe3;
+
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-float: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-tab: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.dark {
+  color-scheme: dark;
+
+  --color-canvas: #1f2226;
+  --color-surface: #2a2e34;
+  --color-ink: #e8eaed;
+  --color-sub: #98a0ab;
+  --color-muted: #b2b9c2;
+  --color-line: #3a3f47;
+  --color-line-strong: #4d535c;
+  --color-side: #26292e;
+  --color-side-line: #333740;
+  --color-side-hover: #31353d;
+  --color-nav-active: #363b43;
+  --color-tab-track: #23262b;
+  --color-row-hover: #2f343b;
+  --color-row-line: #2e323a;
+  --color-avatar: #4a505a;
+  --color-avatar-line: #565c66;
+  --color-brand: #37a86a;
+  --color-brand-hover: #4cc47f;
+  --color-accent: #e79355;
+  --color-accent-line: #6d4b2b;
+  --color-promo-bg: #2f2b21;
+  --color-promo-line: #4a4230;
+  --color-promo-hover: #3a3527;
+  --color-badge-bg: #3d2f21;
+  --color-badge-1688: #f56600;
+  --color-doc: #6ba3f7;
+  --color-notify: #f04b4b;
+  --color-mark-bg: #e8eaed;
+  --color-mark-fg: #1f2329;
+  --color-icon-on: #ffffff;
+  --color-scrollbar: #4a505a;
+
+  /* 深色底上黑阴影几乎不可见，改用更强的描边 + 更深的阴影 */
+  --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.45);
+  --shadow-float: 0 2px 10px rgba(0, 0, 0, 0.5);
+  --shadow-tab: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #app {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-canvas font-sans text-ink;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.18s ease, color 0.18s ease;
+  }
+
+  /* 主内容区滚动条：保留滚动能力，弱化视觉干扰 */
+  .workspace-scroll::-webkit-scrollbar {
+    width: 8px;
+  }
+  .workspace-scroll::-webkit-scrollbar-thumb {
+    background: var(--color-scrollbar);
+    border-radius: 8px;
+  }
+  .workspace-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer components {
+  /* 侧边栏导航项：40px 行高、8px 圆角、左右缩进 16px */
+  .nav-item {
+    @apply flex h-10 cursor-pointer items-center gap-2.5 rounded-btn px-4 text-[14px] text-ink;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .nav-item:hover {
+    @apply bg-side-hover;
+  }
+  .nav-item--active {
+    @apply bg-nav-active font-bold;
+  }
+
+  /* 功能卡片：表面色 + 1px 边框，hover 边框加深并出现阴影 */
+  .func-card {
+    @apply flex cursor-pointer items-start gap-3.5 rounded-card border border-line bg-surface p-[18px];
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.18s ease;
+  }
+  .func-card:hover {
+    @apply border-line-strong;
+    box-shadow: var(--shadow-card);
+  }
+
+  /* 文档标签页 */
+  .tab-btn {
+    @apply cursor-pointer rounded-btn border border-transparent px-4 py-2 text-[14px] text-muted;
+  }
+  .tab-btn:hover {
+    @apply text-ink;
+  }
+  .tab-btn--active {
+    @apply border-line bg-surface font-bold text-ink;
+    box-shadow: var(--shadow-tab);
+  }
+
+  /* 文档列表行 */
+  .doc-row {
+    @apply flex h-14 items-center border-b border-row-line;
+  }
+  .doc-row:hover {
+    @apply bg-row-hover;
+  }
+
+  /* 筛选下拉（静态外观） */
+  .filter-btn {
+    @apply inline-flex cursor-pointer items-center gap-1 rounded-btn px-1.5 py-1 text-[13px] text-muted;
+  }
+  .filter-btn:hover {
+    @apply bg-side-hover text-ink;
+  }
+
+  /* 会员促销卡的描边按钮 */
+  .promo-btn {
+    @apply h-8 cursor-pointer rounded-[6px] border border-accent-line bg-surface px-3 text-[13px] text-accent;
+  }
+  .promo-btn:hover {
+    @apply bg-promo-hover;
+  }
+
+  /* 页面级主按钮（新建文档 / 新建小记等） */
+  .btn-primary {
+    @apply flex h-9 cursor-pointer items-center gap-1.5 rounded-btn bg-brand px-4 text-[14px] text-white;
+    transition: background-color 0.15s ease;
+  }
+  .btn-primary:hover {
+    @apply bg-brand-hover;
+  }
+
+  /* 页面级次按钮 */
+  .btn-ghost {
+    @apply flex h-9 cursor-pointer items-center gap-1.5 rounded-btn border border-line bg-surface px-4 text-[14px] text-muted;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .btn-ghost:hover {
+    @apply border-line-strong text-ink;
+  }
+
+  /* 悬浮圆钮（客服 / 反馈）：表面色底 + 细边框 */
+  .round-btn {
+    @apply flex flex-none items-center justify-center rounded-full border border-line bg-surface text-ink;
+    transition: border-color 0.15s ease, background-color 0.18s ease;
+  }
+  .round-btn:hover {
+    @apply border-line-strong;
+  }
+}
